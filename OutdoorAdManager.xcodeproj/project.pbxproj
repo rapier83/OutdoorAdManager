@@ -33,7 +33,7 @@
 		F902A44F2DA4B4FB00ADFD20 /* Exceptions for "OutdoorAdManager" folder in "OutdoorAdManager" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				SupportingFiles/Info.plist,
 			);
 			target = F902A4232DA4B4FA00ADFD20 /* OutdoorAdManager */;
 		};
