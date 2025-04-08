@@ -1,0 +1,11 @@
+{
+    "haskell.serverExecutablePath": "haskell-language-server-wrapper",
+    "haskell.toolchain": {
+      "stack": true
+    },
+    "haskell.formattingProvider": "ormolu",
+    "haskell.plugin.ghcide-completions.config.autoExtendOn": true,
+    "editor.formatOnSave": true
+  }
+  
+  
