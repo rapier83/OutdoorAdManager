@@ -38,6 +38,8 @@ library
   build-depends:
       aeson
     , base >=4.7 && <5
+    , bytestring
+    , process
     , servant
     , servant-server
     , text
@@ -58,6 +60,8 @@ executable ServantAPISkeletonExe
       ServantAPISkeleton
     , aeson
     , base
+    , bytestring
+    , process
     , servant
     , servant-server
     , text
@@ -79,7 +83,9 @@ test-suite ServantAPISkeletonTest
       ServantAPISkeleton
     , aeson
     , base
+    , bytestring
     , hspec
+    , process
     , servant
     , servant-server
     , text
