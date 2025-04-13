@@ -6,13 +6,15 @@ module Api (ClassificationResult(..), API, api) where
 
 import Servant
 import GHC.Generics (Generic)
-import Data.Aeson (ToJSON)
+import Data.Aeson (ToJSON, FromJSON)
 
 data ClassificationResult = ClassificationResult
   { result :: Int
-  } deriving (Generic)
+  , message :: String
+  } deriving (Show, Generic)
 
 instance ToJSON ClassificationResult
+instance FromJSON ClassificationResult
 
 type API = "classify" :> ReqBody '[JSON] [Int] :> Post '[JSON] ClassificationResult
 
