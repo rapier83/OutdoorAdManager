@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788" systemVersion="24D81" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="AdPlacement" representedClassName="AdPlacement" syncable="YES" codeGenerationType="class">
-        <attribute name="brightnessLevel" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="estimatedCost" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="location" optional="YES" attributeType="String"/>
-        <attribute name="status" optional="YES" attributeType="String"/>
-        <attribute name="timeSlot" optional="YES" attributeType="String"/>
-        <attribute name="width" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="advertisements" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Advertisement" inverseName="placements" inverseEntity="Advertisement"/>
-        <relationship name="mediaSite" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MediaSite" inverseName="placements" inverseEntity="MediaSite"/>
-    </entity>
-    <entity name="Advertisement" representedClassName="Advertisement" syncable="YES" codeGenerationType="class">
+    <entity name="AdCampaign" representedClassName="AdCampaign" syncable="YES" codeGenerationType="class">
         <attribute name="agent" optional="YES" attributeType="String"/>
         <attribute name="brand" optional="YES" attributeType="String"/>
         <attribute name="budget" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -29,20 +17,41 @@
         <attribute name="tagetKeywords" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="uploadDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="placements" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AdPlacement" inverseName="advertisements" inverseEntity="AdPlacement"/>
+        <relationship name="placements" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CampaignPlacement" inverseName="campaign" inverseEntity="CampaignPlacement"/>
+    </entity>
+    <entity name="CampaignPlacement" representedClassName="CampaignPlacement" syncable="YES" codeGenerationType="class">
+        <attribute name="estimatedCost" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="predictedImpression" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="timeSlot" optional="YES" attributeType="String"/>
+        <relationship name="campaign" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AdCampaign" inverseName="placements" inverseEntity="AdCampaign"/>
+        <relationship name="screen" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MediaScreen" inverseName="placements" inverseEntity="MediaScreen"/>
+    </entity>
+    <entity name="MediaScreen" representedClassName="MediaScreen" syncable="YES" codeGenerationType="class">
+        <attribute name="brightnessLevel" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="estimatedCost" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <attribute name="timeSlot" optional="YES" attributeType="String"/>
+        <attribute name="width" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="placements" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CampaignPlacement" inverseName="screen" inverseEntity="CampaignPlacement"/>
+        <relationship name="site" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MediaSite" inverseName="screens" inverseEntity="MediaSite"/>
     </entity>
     <entity name="MediaSite" representedClassName="MediaSite" syncable="YES" codeGenerationType="class">
         <attribute name="address" optional="YES" attributeType="String"/>
-        <attribute name="buildingName" optional="YES" attributeType="String"/>
         <attribute name="circumferenceType" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="mediaSiteName" optional="YES" attributeType="String"/>
         <attribute name="numberOfPanel" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="owner" optional="YES" attributeType="String"/>
         <attribute name="populationDensity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="uploadAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="weatherForecast" optional="YES" attributeType="String"/>
-        <relationship name="placements" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AdPlacement" inverseName="mediaSite" inverseEntity="AdPlacement"/>
+        <relationship name="screens" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MediaScreen" inverseName="site" inverseEntity="MediaScreen"/>
     </entity>
 </model>
