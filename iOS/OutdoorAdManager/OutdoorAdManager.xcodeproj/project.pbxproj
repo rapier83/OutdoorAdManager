@@ -34,7 +34,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				OutdoorAdManager.xcdatamodeld,
 			);
 			target = F9049F1E2DA72D9200D6CDC6 /* OutdoorAdManager */;
 		};

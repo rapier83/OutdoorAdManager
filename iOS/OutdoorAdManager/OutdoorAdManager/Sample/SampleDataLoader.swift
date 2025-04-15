@@ -30,7 +30,7 @@ class SampleDataLoader {
         for i in 1...10 {
             let site = MediaSite(context: context)
             site.id = UUID()
-            site.mediaSiteName = "Site \(i)"
+            site.name = "Site \(i)"
             site.address = "City \(i) Street \(i)"
             site.latitude = 37.5 + Double(i) * 0.01
             site.longitude = 127.0 + Double(i) * 0.01
@@ -54,7 +54,6 @@ class SampleDataLoader {
                 screen.site = site
             }
         }
-
         saveContext()
     }
 
@@ -87,7 +86,6 @@ class SampleDataLoader {
                 }
             }
         }
-
         saveContext()
     }
 
