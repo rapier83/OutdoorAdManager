@@ -23,12 +23,14 @@ extension AdCampaign {
     @NSManaged public var contentType: String?
     @NSManaged public var descriptionText: String?
     @NSManaged public var durationSecond: Int16
+    @NSManaged public var endDate: Date?
     @NSManaged public var id: UUID?
     @NSManaged public var mediaURL: URL?
     @NSManaged public var onAirDays: Int16
     @NSManaged public var predictedImpression: Int32
     @NSManaged public var production: String?
     @NSManaged public var socialTrendScore: Float
+    @NSManaged public var startDate: Date?
     @NSManaged public var tagetKeywords: String?
     @NSManaged public var title: String?
     @NSManaged public var uploadDate: Date?

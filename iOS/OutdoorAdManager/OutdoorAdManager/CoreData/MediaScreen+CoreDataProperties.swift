@@ -21,8 +21,11 @@ extension MediaScreen {
     @NSManaged public var height: Int16
     @NSManaged public var id: UUID?
     @NSManaged public var location: String?
+    @NSManaged public var name: String?
+    @NSManaged public var orientation: String?
     @NSManaged public var status: String?
     @NSManaged public var timeSlot: String?
+    @NSManaged public var uploadAt: Date?
     @NSManaged public var width: Int16
     @NSManaged public var placements: NSSet?
     @NSManaged public var site: MediaSite?
