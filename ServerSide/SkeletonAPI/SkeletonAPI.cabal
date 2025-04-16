@@ -4,11 +4,11 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 
-name:           ServantAPISkeleton
+name:           SkeletonAPI
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/servantAPISkeleton#readme>
-homepage:       https://github.com/githubuser/ServantAPISkeleton#readme
-bug-reports:    https://github.com/githubuser/ServantAPISkeleton/issues
+description:    Please see the README on GitHub at <https://github.com/githubuser/SkeletonAPI#readme>
+homepage:       https://github.com/githubuser/SkeletonAPI#readme
+bug-reports:    https://github.com/githubuser/SkeletonAPI/issues
 author:         Author name here
 maintainer:     example@example.com
 copyright:      2025 Author name here
@@ -21,7 +21,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/ServantAPISkeleton
+  location: https://github.com/githubuser/SkeletonAPI
 
 library
   exposed-modules:
@@ -29,9 +29,9 @@ library
       Handler
       Lib
   other-modules:
-      Paths_ServantAPISkeleton
+      Paths_SkeletonAPI
   autogen-modules:
-      Paths_ServantAPISkeleton
+      Paths_SkeletonAPI
   hs-source-dirs:
       src
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wpartial-fields -Wredundant-constraints
@@ -51,14 +51,14 @@ library
 executable ServantAPISkeletonExe
   main-is: Main.hs
   other-modules:
-      Paths_ServantAPISkeleton
+      Paths_SkeletonAPI
   autogen-modules:
-      Paths_ServantAPISkeleton
+      Paths_SkeletonAPI
   hs-source-dirs:
       app
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N -Wall
   build-depends:
-      ServantAPISkeleton
+      SkeletonAPI
     , aeson
     , base
     , bytestring
@@ -71,18 +71,18 @@ executable ServantAPISkeletonExe
     , warp
   default-language: Haskell2010
 
-test-suite ServantAPISkeletonTest
+test-suite SkeletonAPITest
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Paths_ServantAPISkeleton
+      Paths_SkeletonAPI
   autogen-modules:
-      Paths_ServantAPISkeleton
+      Paths_SkeletonAPI
   hs-source-dirs:
       test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      ServantAPISkeleton
+      SkeletonAPI
     , aeson
     , base
     , bytestring
