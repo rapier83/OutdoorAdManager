@@ -1,0 +1,6 @@
+[submodule "ServerSide/OutdoorAdManager-Server-API"]
+	path = ServerSide/OutdoorAdManager-Server-API
+	url = https://github.com/rapier83/OutdoorAdManager-Server-API.git
+[submodule "ServerSide/SkeletonAPI/Serverside/SkeletonAPI"]
+	path = ServerSide/SkeletonAPI/Serverside/SkeletonAPI
+	url = https://github.com/rapier83/OutdoorAdManager.git
