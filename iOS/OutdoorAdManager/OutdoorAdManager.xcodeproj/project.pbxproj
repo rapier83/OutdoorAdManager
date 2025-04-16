@@ -33,7 +33,6 @@
 		F9049F4A2DA72D9300D6CDC6 /* Exceptions for "OutdoorAdManager" folder in "OutdoorAdManager" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				API/temp.swift,
 				Info.plist,
 			);
 			target = F9049F1E2DA72D9200D6CDC6 /* OutdoorAdManager */;

@@ -1,18 +1,18 @@
 //
-//  MediaSiteListViewController.swift
+//  MediaSceenListViewController.swift
 //  OutdoorAdManager
 //
 //  Created by KEATON on 4/16/25.
 //
 
-
 import UIKit
 import CoreData
 
-class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MediaScreenListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    var mediaSite: MediaSite?
     private let tableView = UITableView()
-    private var mediaSites: [MediaSite] = []
+    private var mediaScreens: [MediaScreen] = []
 
     private var context: NSManagedObjectContext {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -21,17 +21,17 @@ class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "미디어 사이트"
+        title = mediaSite?.name ?? "스크린 목록"
         view.backgroundColor = .white
         setupTableView()
-        fetchMediaSites()
+        fetchScreens()
     }
 
     private func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MediaSiteCell")
+        tableView.register(MediaScreenCell.self, forCellReuseIdentifier: "MediaScreenCell")
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
@@ -42,39 +42,38 @@ class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITa
         ])
     }
 
-    private func fetchMediaSites() {
-        let fetchRequest: NSFetchRequest<MediaSite> = MediaSite.fetchRequest()
-        do {
-            mediaSites = try context.fetch(fetchRequest)
-            tableView.reloadData()
-        } catch {
-            print("❌ Failed to fetch MediaSites: \(error)")
-        }
+    private func fetchScreens() {
+        guard let site = mediaSite, let screens = site.screens as? Set<MediaScreen> else { return }
+        mediaScreens = screens.sorted(by: { $0.name ?? "" < $1.name ?? "" })
+        tableView.reloadData()
     }
 
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mediaSites.count
+        return mediaScreens.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MediaSiteCell", for: indexPath)
-        let site = mediaSites[indexPath.row]
-        let screenCount = (site.screens as? Set<MediaScreen>)?.count ?? 0
-        print("📦 mediaSites count: \(mediaSites.count)")
-        
-        cell.textLabel?.text = "\(site.name ?? "(이름 없음)") (\(screenCount) 스크린)"
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MediaScreenCell", for: indexPath) as? MediaScreenCell else {
+            return UITableViewCell()
+        }
+        let screen = mediaScreens[indexPath.row]
+        cell.configure(with: screen)
         return cell
     }
 
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let site = mediaSites[indexPath.row]
-        let screenListVC = MediaScreenListViewController()
-        screenListVC.mediaSite = site
-        navigationController?.pushViewController(screenListVC, animated: true)
-        tableView.deselectRow(at: indexPath, animated: true)
+        let screen = mediaScreens[indexPath.row]
+        let message = "밝기: \(screen.brightnessLevel)\n시간대: \(screen.timeSlot ?? "-")"
+        let alert = UIAlertController(title: screen.name, message: message, preferredStyle: .alert)
+        
+        let campaignVC = AdCampaignListViewController()
+        campaignVC.mediaScreen = screen
+        navigationController?.pushViewController(campaignVC, animated: true)
     }
+    
+
 }
