@@ -61,8 +61,10 @@ class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MediaSiteCell", for: indexPath)
         let site = mediaSites[indexPath.row]
+        let screenCount = (site.screens as? Set<MediaScreen>)?.count ?? 0
         print("📦 mediaSites count: \(mediaSites.count)")
-        cell.textLabel?.text = site.name ?? "(이름 없음)"
+        
+        cell.textLabel?.text = "\(site.name ?? "(이름 없음)") (\(screenCount) 스크린)"
         return cell
     }
 
