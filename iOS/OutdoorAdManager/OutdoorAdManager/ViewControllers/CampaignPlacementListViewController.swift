@@ -1,18 +1,18 @@
 //
-//  MediaSceenListViewController.swift
+//  CampaignPlacementListViewController.swift
 //  OutdoorAdManager
 //
 //  Created by KEATON on 4/16/25.
 //
 
+
 import UIKit
 import CoreData
 
-class MediaScreenListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class CampaignPlacementListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    var mediaSite: MediaSite?
     private let tableView = UITableView()
-    private var mediaScreens: [MediaScreen] = []
+    private var placements: [CampaignPlacement] = []
 
     private var context: NSManagedObjectContext {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -21,17 +21,17 @@ class MediaScreenListViewController: UIViewController, UITableViewDataSource, UI
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = mediaSite?.name ?? "스크린 목록"
+        title = "추천 결과"
         view.backgroundColor = .white
         setupTableView()
-        fetchScreens()
+        fetchPlacements()
     }
 
     private func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(MediaScreenCell.self, forCellReuseIdentifier: "MediaScreenCell")
+        tableView.register(CampaignPlacementCell.self, forCellReuseIdentifier: "CampaignPlacementCell")
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
@@ -42,38 +42,46 @@ class MediaScreenListViewController: UIViewController, UITableViewDataSource, UI
         ])
     }
 
-    private func fetchScreens() {
-        guard let site = mediaSite, let screens = site.screens as? Set<MediaScreen> else { return }
-        mediaScreens = screens.sorted(by: { $0.name ?? "" < $1.name ?? "" })
-        tableView.reloadData()
+    private func fetchPlacements() {
+        let fetchRequest: NSFetchRequest<CampaignPlacement> = CampaignPlacement.fetchRequest()
+        do {
+            placements = try context.fetch(fetchRequest)
+            print("✅ 가져온 CampaignPlacement 수: \(placements.count)")
+            tableView.reloadData()
+        } catch {
+            print("❌ CampaignPlacement fetch 실패: \(error)")
+        }
     }
 
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mediaScreens.count
+        return placements.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MediaScreenCell", for: indexPath) as? MediaScreenCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CampaignPlacementCell", for: indexPath) as? CampaignPlacementCell else {
             return UITableViewCell()
         }
-        let screen = mediaScreens[indexPath.row]
-        cell.configure(with: screen)
+        let placement = placements[indexPath.row]
+        cell.configure(with: placement)
         return cell
     }
 
-    // MARK: - UITableViewDelegate
+    // MARK: - UITableViewDelegate (선택 시 Alert 예시)
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let screen = mediaScreens[indexPath.row]
-        let message = "밝기: \(screen.brightnessLevel)\n시간대: \(screen.timeSlot ?? "-")"
-        let alert = UIAlertController(title: screen.name, message: message, preferredStyle: .alert)
-        
+        let placement = placements[indexPath.row]
+        let message = """
+        캠페인: \(placement.campaign?.title ?? "-")
+        위치: \(placement.screen?.name ?? "-")
+        시간대: \(placement.timeSlot ?? "-")
+        예상 노출 수: \(placement.predictedImpression)
+        예상 비용: ₩\(Int(placement.estimatedCost))
+        """
+        let alert = UIAlertController(title: "배치 정보", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         present(alert, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
-
 }
