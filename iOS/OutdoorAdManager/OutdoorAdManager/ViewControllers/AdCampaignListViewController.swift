@@ -1,18 +1,16 @@
 //
-//  MediaSceenListViewController.swift
+//  AdCampaignListViewController.swift
 //  OutdoorAdManager
-//
-//  Created by KEATON on 4/16/25.
 //
 
 import UIKit
 import CoreData
 
-class MediaScreenListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class AdCampaignListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    var mediaSite: MediaSite?
+    var mediaScreen: MediaScreen?
+    private var campaigns: [AdCampaign] = []
     private let tableView = UITableView()
-    private var mediaScreens: [MediaScreen] = []
 
     private var context: NSManagedObjectContext {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -21,17 +19,17 @@ class MediaScreenListViewController: UIViewController, UITableViewDataSource, UI
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = mediaSite?.name ?? "스크린 목록"
+        title = mediaScreen?.name ?? "캠페인 목록"
         view.backgroundColor = .white
         setupTableView()
-        fetchScreens()
+        fetchCampaigns()
     }
 
     private func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(MediaScreenCell.self, forCellReuseIdentifier: "MediaScreenCell")
+        tableView.register(AdCampaignCell.self, forCellReuseIdentifier: "AdCampaignCell")
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
@@ -42,38 +40,32 @@ class MediaScreenListViewController: UIViewController, UITableViewDataSource, UI
         ])
     }
 
-    private func fetchScreens() {
-        guard let site = mediaSite, let screens = site.screens as? Set<MediaScreen> else { return }
-        mediaScreens = screens.sorted(by: { $0.name ?? "" < $1.name ?? "" })
+    private func fetchCampaigns() {
+        guard let screen = mediaScreen else { return }
+        guard let placements = screen.placements as? Set<CampaignPlacement> else { return }
+
+        let uniqueCampaigns = Set(placements.compactMap { $0.campaign })
+        campaigns = Array(uniqueCampaigns)
         tableView.reloadData()
     }
 
-    // MARK: - UITableViewDataSource
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mediaScreens.count
+        return campaigns.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MediaScreenCell", for: indexPath) as? MediaScreenCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "AdCampaignCell", for: indexPath) as? AdCampaignCell else {
             return UITableViewCell()
         }
-        let screen = mediaScreens[indexPath.row]
-        cell.configure(with: screen)
+        cell.configure(with: campaigns[indexPath.row])
         return cell
     }
 
-    // MARK: - UITableViewDelegate
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let screen = mediaScreens[indexPath.row]
-        let message = "밝기: \(screen.brightnessLevel)\n시간대: \(screen.timeSlot ?? "-")"
-        let alert = UIAlertController(title: screen.name, message: message, preferredStyle: .alert)
-        
-        let campaignVC = AdCampaignListViewController()
-        campaignVC.mediaScreen = screen
-        navigationController?.pushViewController(campaignVC, animated: true)
+        let campaign = campaigns[indexPath.row]
+        let detailVC = AdCampaignDetailViewController()
+        detailVC.campaign = campaign
+        navigationController?.pushViewController(detailVC, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
-    
-
 }
