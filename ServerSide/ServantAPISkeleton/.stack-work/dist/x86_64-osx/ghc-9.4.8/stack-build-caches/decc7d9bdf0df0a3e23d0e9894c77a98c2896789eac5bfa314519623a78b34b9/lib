@@ -1,0 +1,20 @@
+/Users/keaton/.ghcup/ghc/9.4.8/lib/ghc-9.4.8/lib/x86_64-osx-ghc-9.4.8/rts-1.0.2/include/ghcversion.h:
+  hash: 4bc88722407a89d1efbfa9c116cd4017af6ea3ff746643032b96cef62782f5dd
+? /Users/keaton/Dev/OutdoorAdManager/ServerSide/ServantAPISkeleton/.stack-work/dist/x86_64-osx/ghc-9.4.8/build/autogen/Paths_ServantAPISkeleton.hs
+: hash: 6288139c9a4aa79b62909e0f197e4de57dc2a0ee817259bbfb026d590f97ebc2
+? /Users/keaton/Dev/OutdoorAdManager/ServerSide/ServantAPISkeleton/.stack-work/dist/x86_64-osx/ghc-9.4.8/build/autogen/cabal_macros.h
+: hash: e91bd5c40aaf20b0553c5f8c84ed28f1a470d339f2270b10a1aaf85e62f22971
+/Users/keaton/Dev/OutdoorAdManager/ServerSide/ServantAPISkeleton/CHANGELOG.md:
+  hash: 779f80fbd4392172335f6e6cee07b0605a2e8fc061c3b3364e631e6ef551f061
+/Users/keaton/Dev/OutdoorAdManager/ServerSide/ServantAPISkeleton/README.md:
+  hash: 9b049c5cad2d365fa211793c296d5a4eb7778831bdfb5e9f520fca01294bbd3f
+/Users/keaton/Dev/OutdoorAdManager/ServerSide/ServantAPISkeleton/ServantAPISkeleton.cabal:
+  hash: 336c454b962c388a98fad50b65450a19f7cdc76a3bb689b376ccff01c15bd6a5
+/Users/keaton/Dev/OutdoorAdManager/ServerSide/ServantAPISkeleton/package.yaml:
+  hash: c9169e628e63b60434dee3c955330f4d604fe4c131275d0e4de569b3852c09c3
+/Users/keaton/Dev/OutdoorAdManager/ServerSide/ServantAPISkeleton/src/Api.hs:
+  hash: b5f4a5c3e6addd62431cbb4ba5d769aa54956ca0437c4a2f554b4688976ac173
+/Users/keaton/Dev/OutdoorAdManager/ServerSide/ServantAPISkeleton/src/Handler.hs:
+  hash: f1e54d217d36203243c81f18498c74f9d6e87080f1fd808f4edd0bbd572f0b27
+/Users/keaton/Dev/OutdoorAdManager/ServerSide/ServantAPISkeleton/src/Lib.hs:
+  hash: 11d6d255cb397fa45980eb516ea685146565d9de2108c4eea356ea41db8364be

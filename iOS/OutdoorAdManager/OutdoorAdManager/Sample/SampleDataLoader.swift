@@ -8,35 +8,6 @@
 // 📄 SampleDataLoader.swift
 
 import Foundation
-<<<<<<< HEAD
-
-final class SampleDataLoader {
-
-    static func loadAllSampleData() {
-        for i in 1...50 {
-            let site = MediaSiteManager.shared.createMediaSite(
-                buildingName: "Building \(i)",
-                address: "서울시 강남구 가상로 \(i)",
-                latitude: 37.5 + Double.random(in: -0.05...0.05),
-                longitude: 127.0 + Double.random(in: -0.05...0.05)
-            )
-
-            let placement = AdPlacementManager.shared.createPlacement(
-                location: "전광판 위치 \(i)",
-                brightness: Float.random(in: 0.5...1.0),
-                mediaSite: site
-            )
-
-            _ = AdvertisementManager.shared.createAdvertisement(
-                title: "광고 타이틀 \(i)",
-                brand: "브랜드 \(Int.random(in: 1...10))",
-                mediaURL: URL(string: "https://example.com/ad\(i).mp4")!,
-                budget: Double.random(in: 300_000...1_000_000),
-                placements: [placement]
-            )
-        }
-    }
-=======
 import CoreData
 import UIKit
 
@@ -68,7 +39,8 @@ class SampleDataLoader {
             site.uploadAt = Date()
             site.weatherForecast = "Sunny"
 
-            for j in 1...3 {
+            let screenCount = Int.random(in: 1...5)
+            for j in 1...screenCount {
                 let screen = MediaScreen(context: context)
                 screen.id = UUID()
                 screen.name = "Screen \(i)-\(j)"
@@ -87,7 +59,16 @@ class SampleDataLoader {
     }
 
     func insertSampleAdCampaigns() {
-        for i in 1...5 {
+        // 모든 스크린을 가져와서 랜덤하게 섞음
+        let screenFetch: NSFetchRequest<MediaScreen> = MediaScreen.fetchRequest()
+        guard let allScreens = try? context.fetch(screenFetch).shuffled() else { return }
+
+        // 캠페인 5개 기준, 각 캠페인에 2개씩 나눠 배분
+        let screensPerCampaign = stride(from: 0, to: min(10, allScreens.count), by: 2).map {
+            Array(allScreens[$0..<$0+2])
+        }
+
+        for i in 1...screensPerCampaign.count {
             let campaign = AdCampaign(context: context)
             campaign.id = UUID()
             campaign.title = "Campaign \(i)"
@@ -100,21 +81,25 @@ class SampleDataLoader {
             campaign.descriptionText = "Ad campaign description for \(i)"
             campaign.uploadDate = Date()
 
-            // Match with some screens
-            let fetchRequest: NSFetchRequest<MediaScreen> = MediaScreen.fetchRequest()
-            if let screens = try? context.fetch(fetchRequest).prefix(2) {
-                for screen in screens {
-                    let placement = CampaignPlacement(context: context)
-                    placement.id = UUID()
-                    placement.predictedImpression = Int16(Int32.random(in: 1000...5000))
-                    placement.timeSlot = "08:00 ~ 20:00"
-                    placement.estimatedCost = Double.random(in: 500...1500)
-                    placement.location = screen.name ?? "Unknown"
-                    placement.campaign = campaign
-                    placement.screen = screen
-                }
+            let screens = screensPerCampaign[i - 1]
+
+            for screen in screens {
+                let placement = CampaignPlacement(context: context)
+                placement.id = UUID()
+                placement.predictedImpression = Int16(Int32.random(in: 1000...5000))
+                placement.timeSlot = "08:00 ~ 20:00"
+                placement.estimatedCost = Double.random(in: 500...1500)
+                placement.location = screen.name ?? "Unknown"
+                placement.campaign = campaign
+                placement.screen = screen
+
+                campaign.addToPlacements(placement)
+                screen.addToPlacements(placement)
+
+                print("🔗 캠페인 '\(campaign.title ?? "")' → 스크린 '\(screen.name ?? "")' (Site: \(screen.site?.name ?? "-"))")
             }
         }
+
         saveContext()
     }
 
@@ -133,7 +118,18 @@ class SampleDataLoader {
             let request = NSBatchDeleteRequest(fetchRequest: fetch)
             _ = try? context.execute(request)
         }
+        context.reset() // ✅ 캐시, registered object, undo 등 초기화
         saveContext()
     }
->>>>>>> ce9af146ce06abdf0e406970988b4dad0a069acd
+
+    func debugCampaignMapping() {
+        let fetchRequest: NSFetchRequest<CampaignPlacement> = CampaignPlacement.fetchRequest()
+        if let placements = try? context.fetch(fetchRequest) {
+            for placement in placements {
+                print("🧩 Campaign: \(placement.campaign?.title ?? "-") ↔ Screen: \(placement.screen?.name ?? "-") ↔ Site: \(placement.screen?.site?.name ?? "-")")
+            }
+        } else {
+            print("❌ Failed to fetch CampaignPlacement")
+        }
+    }
 }

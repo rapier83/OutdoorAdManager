@@ -69,10 +69,15 @@ class MediaScreenListViewController: UIViewController, UITableViewDataSource, UI
         let screen = mediaScreens[indexPath.row]
         let message = "밝기: \(screen.brightnessLevel)\n시간대: \(screen.timeSlot ?? "-")"
         let alert = UIAlertController(title: screen.name, message: message, preferredStyle: .alert)
-        
-        let campaignVC = AdCampaignListViewController()
-        campaignVC.mediaScreen = screen
-        navigationController?.pushViewController(campaignVC, animated: true)
+
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
+            let campaignVC = AdCampaignListViewController()
+            campaignVC.mediaScreen = screen
+            self.navigationController?.pushViewController(campaignVC, animated: true)
+        }))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+
+        self.present(alert, animated: true, completion: nil)
     }
     
 
