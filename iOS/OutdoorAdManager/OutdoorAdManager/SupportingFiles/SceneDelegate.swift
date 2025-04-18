@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         let window = UIWindow(windowScene: windowScene)
-        let rootVC = MediaSiteListViewController()
+        let rootVC = DashBoardViewController()
         let navController = UINavigationController(rootViewController: rootVC)
         
         SampleDataLoader.shared.resetAllData() // ✅ 샘플데이터 초기화

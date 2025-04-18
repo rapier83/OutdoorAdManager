@@ -5,8 +5,6 @@
 //  Created by KEATON on 4/11/25.
 //
 
-// 📄 SampleDataLoader.swift
-
 import Foundation
 import CoreData
 import UIKit
@@ -16,7 +14,7 @@ class SampleDataLoader {
     static let shared = SampleDataLoader()
     private init() {}
 
-    private var context: NSManagedObjectContext {
+    var context: NSManagedObjectContext {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         return appDelegate.persistentContainer.viewContext
     }
@@ -59,16 +57,7 @@ class SampleDataLoader {
     }
 
     func insertSampleAdCampaigns() {
-        // 모든 스크린을 가져와서 랜덤하게 섞음
-        let screenFetch: NSFetchRequest<MediaScreen> = MediaScreen.fetchRequest()
-        guard let allScreens = try? context.fetch(screenFetch).shuffled() else { return }
-
-        // 캠페인 5개 기준, 각 캠페인에 2개씩 나눠 배분
-        let screensPerCampaign = stride(from: 0, to: min(10, allScreens.count), by: 2).map {
-            Array(allScreens[$0..<$0+2])
-        }
-
-        for i in 1...screensPerCampaign.count {
+        for i in 1...5 {
             let campaign = AdCampaign(context: context)
             campaign.id = UUID()
             campaign.title = "Campaign \(i)"
@@ -81,25 +70,20 @@ class SampleDataLoader {
             campaign.descriptionText = "Ad campaign description for \(i)"
             campaign.uploadDate = Date()
 
-            let screens = screensPerCampaign[i - 1]
-
-            for screen in screens {
-                let placement = CampaignPlacement(context: context)
-                placement.id = UUID()
-                placement.predictedImpression = Int16(Int32.random(in: 1000...5000))
-                placement.timeSlot = "08:00 ~ 20:00"
-                placement.estimatedCost = Double.random(in: 500...1500)
-                placement.location = screen.name ?? "Unknown"
-                placement.campaign = campaign
-                placement.screen = screen
-
-                campaign.addToPlacements(placement)
-                screen.addToPlacements(placement)
-
-                print("🔗 캠페인 '\(campaign.title ?? "")' → 스크린 '\(screen.name ?? "")' (Site: \(screen.site?.name ?? "-"))")
+            let fetchRequest: NSFetchRequest<MediaScreen> = MediaScreen.fetchRequest()
+            if let screens = try? context.fetch(fetchRequest).shuffled().prefix(2) {
+                for screen in screens {
+                    let placement = CampaignPlacement(context: context)
+                    placement.id = UUID()
+                    placement.predictedImpression = Int16(Int32.random(in: 1000...5000))
+                    placement.timeSlot = "08:00 ~ 20:00"
+                    placement.estimatedCost = Double.random(in: 500...1500)
+                    placement.location = screen.name ?? "Unknown"
+                    placement.campaign = campaign
+                    placement.screen = screen
+                }
             }
         }
-
         saveContext()
     }
 
@@ -118,18 +102,19 @@ class SampleDataLoader {
             let request = NSBatchDeleteRequest(fetchRequest: fetch)
             _ = try? context.execute(request)
         }
-        context.reset() // ✅ 캐시, registered object, undo 등 초기화
+        context.reset()
         saveContext()
     }
 
     func debugCampaignMapping() {
-        let fetchRequest: NSFetchRequest<CampaignPlacement> = CampaignPlacement.fetchRequest()
-        if let placements = try? context.fetch(fetchRequest) {
-            for placement in placements {
-                print("🧩 Campaign: \(placement.campaign?.title ?? "-") ↔ Screen: \(placement.screen?.name ?? "-") ↔ Site: \(placement.screen?.site?.name ?? "-")")
+        let request: NSFetchRequest<CampaignPlacement> = CampaignPlacement.fetchRequest()
+        if let results = try? context.fetch(request) {
+            for placement in results {
+                let campaignTitle = placement.campaign?.title ?? "?"
+                let screenName = placement.screen?.name ?? "?"
+                let siteName = placement.screen?.site?.name ?? "?"
+                print("🔗 캠페인 '\(campaignTitle)' → 스크린 '\(screenName)' (Site: \(siteName))")
             }
-        } else {
-            print("❌ Failed to fetch CampaignPlacement")
         }
     }
 }

@@ -24,6 +24,12 @@ class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITa
         title = "미디어 사이트"
         view.backgroundColor = .white
         setupTableView()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "도구",
+            style: .plain,
+            target: self,
+            action: #selector(presentTools)
+        )
         fetchMediaSites()
     }
 
@@ -64,7 +70,7 @@ class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITa
         let screenCount = (site.screens as? Set<MediaScreen>)?.count ?? 0
         print("📦 mediaSites count: \(mediaSites.count)")
         
-        cell.textLabel?.text = "\(site.name ?? "(이름 없음)") (\(screenCount) 스크린)"
+        cell.textLabel?.text = "\(site.name ?? "(이름 없음)") (\(screenCount) 면)"
         return cell
     }
 
@@ -76,5 +82,12 @@ class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITa
         screenListVC.mediaSite = site
         navigationController?.pushViewController(screenListVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    // MARK: - Action Functions
+    @objc private func presentTools() {
+        let toolsVC = CampaignToolsViewController()
+        let navController = UINavigationController(rootViewController: toolsVC)
+        present(navController, animated: true)
     }
 }
