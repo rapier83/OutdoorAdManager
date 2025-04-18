@@ -5,38 +5,7 @@
 //  Created by KEATON on 4/11/25.
 //
 
-// 📄 SampleDataLoader.swift
-
 import Foundation
-<<<<<<< HEAD
-
-final class SampleDataLoader {
-
-    static func loadAllSampleData() {
-        for i in 1...50 {
-            let site = MediaSiteManager.shared.createMediaSite(
-                buildingName: "Building \(i)",
-                address: "서울시 강남구 가상로 \(i)",
-                latitude: 37.5 + Double.random(in: -0.05...0.05),
-                longitude: 127.0 + Double.random(in: -0.05...0.05)
-            )
-
-            let placement = AdPlacementManager.shared.createPlacement(
-                location: "전광판 위치 \(i)",
-                brightness: Float.random(in: 0.5...1.0),
-                mediaSite: site
-            )
-
-            _ = AdvertisementManager.shared.createAdvertisement(
-                title: "광고 타이틀 \(i)",
-                brand: "브랜드 \(Int.random(in: 1...10))",
-                mediaURL: URL(string: "https://example.com/ad\(i).mp4")!,
-                budget: Double.random(in: 300_000...1_000_000),
-                placements: [placement]
-            )
-        }
-    }
-=======
 import CoreData
 import UIKit
 
@@ -45,7 +14,7 @@ class SampleDataLoader {
     static let shared = SampleDataLoader()
     private init() {}
 
-    private var context: NSManagedObjectContext {
+    var context: NSManagedObjectContext {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         return appDelegate.persistentContainer.viewContext
     }
@@ -68,7 +37,8 @@ class SampleDataLoader {
             site.uploadAt = Date()
             site.weatherForecast = "Sunny"
 
-            for j in 1...3 {
+            let screenCount = Int.random(in: 1...5)
+            for j in 1...screenCount {
                 let screen = MediaScreen(context: context)
                 screen.id = UUID()
                 screen.name = "Screen \(i)-\(j)"
@@ -100,9 +70,8 @@ class SampleDataLoader {
             campaign.descriptionText = "Ad campaign description for \(i)"
             campaign.uploadDate = Date()
 
-            // Match with some screens
             let fetchRequest: NSFetchRequest<MediaScreen> = MediaScreen.fetchRequest()
-            if let screens = try? context.fetch(fetchRequest).prefix(2) {
+            if let screens = try? context.fetch(fetchRequest).shuffled().prefix(2) {
                 for screen in screens {
                     let placement = CampaignPlacement(context: context)
                     placement.id = UUID()
@@ -133,7 +102,19 @@ class SampleDataLoader {
             let request = NSBatchDeleteRequest(fetchRequest: fetch)
             _ = try? context.execute(request)
         }
+        context.reset()
         saveContext()
     }
->>>>>>> ce9af146ce06abdf0e406970988b4dad0a069acd
+
+    func debugCampaignMapping() {
+        let request: NSFetchRequest<CampaignPlacement> = CampaignPlacement.fetchRequest()
+        if let results = try? context.fetch(request) {
+            for placement in results {
+                let campaignTitle = placement.campaign?.title ?? "?"
+                let screenName = placement.screen?.name ?? "?"
+                let siteName = placement.screen?.site?.name ?? "?"
+                print("🔗 캠페인 '\(campaignTitle)' → 스크린 '\(screenName)' (Site: \(siteName))")
+            }
+        }
+    }
 }

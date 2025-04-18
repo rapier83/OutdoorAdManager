@@ -21,14 +21,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         let window = UIWindow(windowScene: windowScene)
-        let rootVC = MediaSiteListViewController()
+        let rootVC = DashBoardViewController()
         let navController = UINavigationController(rootViewController: rootVC)
         
-        DispatchQueue.main.async() {
-            SampleDataLoader.shared.resetAllData() // ✅ 샘플데이터 초기화
-            SampleDataLoader.shared.loadAll() // ✅ 샘플데이터 비동기화 주입
-        }
-        
+        SampleDataLoader.shared.resetAllData() // ✅ 샘플데이터 초기화
+        SampleDataLoader.shared.loadAll()      // ✅ 샘플데이터 비동기화 주입
+        SampleDataLoader.shared.debugCampaignMapping() // 🔍 연결 디버그 출력
+    
         window.rootViewController = navController
         self.window = window
         window.makeKeyAndVisible()
@@ -67,4 +66,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-

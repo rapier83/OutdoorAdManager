@@ -1,7 +1,5 @@
-//
 //  AdCampaignListViewController.swift
 //  OutdoorAdManager
-//
 
 import UIKit
 import CoreData
@@ -50,6 +48,16 @@ class AdCampaignListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if campaigns.isEmpty {
+            let label = UILabel()
+            label.text = "노출된 캠페인이 없습니다"
+            label.textAlignment = .center
+            label.textColor = .gray
+            label.font = UIFont.systemFont(ofSize: 16)
+            tableView.backgroundView = label
+        } else {
+            tableView.backgroundView = nil
+        }
         return campaigns.count
     }
 
