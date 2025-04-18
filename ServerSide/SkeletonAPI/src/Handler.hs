@@ -25,7 +25,7 @@ trainStatusHandler = do
   exists <- liftIO $ doesFileExist "training_status.txt"
   if not exists
     then return "unknown"
-    else liftIO (T.unpack <$> TIO.readFile "training_status.txt") >>= return
+    else liftIO (T.unpack <$> TIO.readFile "training_status.txt")
 
 -- 기존 classify
 classifyHandler :: [Int] -> Handler ClassificationResult
