@@ -2,79 +2,47 @@
 //  DashBoardViewController.swift
 //  OutdoorAdManager
 //
-//  Created by KEATON on 4/18/25.
+//  Created by KEATON on 4/18/25 with All-Mighty System.
 //
-
-
-//
-//  DashBoardViewController.swift
-//  OutdoorAdManager
-//
-
 import UIKit
 
-class DashBoardViewController: UIViewController {
+class DashboardViewController: UIViewController {
+
+    private let stack = UIStackView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "대시보드"
-        view.backgroundColor = .systemGroupedBackground
-        setupDashboard()
+        title = "CORA 대시보드"
+        view.backgroundColor = Color.background
+        setupButtons()
     }
 
-    private func setupDashboard() {
-        let stack = UIStackView()
+    private func setupButtons() {
         stack.axis = .vertical
-        stack.spacing = 20
-        stack.alignment = .center
+        stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
-
-        // Title
-        let titleLabel = UILabel()
-        titleLabel.text = "Outdoor Ad Manager"
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
-
-        // Stats (예시용)
-        let statLabel = UILabel()
-        statLabel.text = "오늘 등록된 사이트: 10개"
-        statLabel.font = UIFont.systemFont(ofSize: 16)
-        statLabel.textColor = .secondaryLabel
-
-        // 버튼: 사이트 목록
-        let siteButton = UIButton(type: .system)
-        siteButton.setTitle("📍 사이트 목록 보기", for: .normal)
-        siteButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        siteButton.addTarget(self, action: #selector(openSiteList), for: .touchUpInside)
-
-        // 버튼: 캠페인 도구
-        let toolsButton = UIButton(type: .system)
-        toolsButton.setTitle("🛠 캠페인 도구 열기", for: .normal)
-        toolsButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        toolsButton.addTarget(self, action: #selector(openCampaignTools), for: .touchUpInside)
-
-        stack.addArrangedSubview(titleLabel)
-        stack.addArrangedSubview(statLabel)
-        stack.addArrangedSubview(siteButton)
-        stack.addArrangedSubview(toolsButton)
-
         view.addSubview(stack)
 
         NSLayoutConstraint.activate([
-            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24)
         ])
-    }
 
-    @objc private func openSiteList() {
-        let siteListVC = MediaSiteListTableViewController()
-        navigationController?.pushViewController(siteListVC, animated: true)
-    }
+        let features: [(String, UIViewController)] = [
+            ("\u{1F4CD} 미디어 사이트", MediaSiteListViewController()),
+            ("\u{1F6F0}\u{FE0F} 추천 결과", RecommendationResultViewController()),
+            ("\u{1F4DD} 로그 보기", LogsViewController()),
+            ("\u{1F4E6} 캠페인 도구", AdCampaignToolViewController())
+        ]
 
-    @objc private func openCampaignTools() {
-        let toolsVC = CampaignToolsViewController()
-        let nav = UINavigationController(rootViewController: toolsVC)
-        present(nav, animated: true)
+        for (title, viewController) in features {
+            let button = PrimaryButton()
+            button.setTitle(title, for: .normal)
+            button.addAction(UIAction(handler: { _ in
+                self.navigationController?.pushViewController(viewController, animated: true)
+            }), for: .touchUpInside)
+            stack.addArrangedSubview(button)
+        }
     }
 }

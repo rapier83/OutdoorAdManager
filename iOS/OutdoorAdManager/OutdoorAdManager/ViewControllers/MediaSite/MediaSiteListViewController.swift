@@ -4,8 +4,6 @@
 //
 //  Created by KEATON on 4/16/25.
 //
-
-
 import UIKit
 import CoreData
 
@@ -22,14 +20,8 @@ class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "미디어 사이트"
-        view.backgroundColor = .white
+        view.backgroundColor = Color.background
         setupTableView()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "도구",
-            style: .plain,
-            target: self,
-            action: #selector(presentTools)
-        )
         fetchMediaSites()
     }
 
@@ -37,7 +29,6 @@ class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITa
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MediaSiteCell")
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
@@ -49,12 +40,10 @@ class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITa
     }
 
     private func fetchMediaSites() {
-        let fetchRequest: NSFetchRequest<MediaSite> = MediaSite.fetchRequest()
-        do {
-            mediaSites = try context.fetch(fetchRequest)
+        let request: NSFetchRequest<MediaSite> = MediaSite.fetchRequest()
+        if let result = try? context.fetch(request) {
+            mediaSites = result
             tableView.reloadData()
-        } catch {
-            print("❌ Failed to fetch MediaSites: \(error)")
         }
     }
 
@@ -65,29 +54,34 @@ class MediaSiteListViewController: UIViewController, UITableViewDataSource, UITa
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MediaSiteCell", for: indexPath)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "MediaSiteCell")
         let site = mediaSites[indexPath.row]
-        let screenCount = (site.screens as? Set<MediaScreen>)?.count ?? 0
-        print("📦 mediaSites count: \(mediaSites.count)")
-        
-        cell.textLabel?.text = "\(site.name ?? "(이름 없음)") (\(screenCount) 면)"
+
+        cell.textLabel?.text = site.name ?? "알 수 없음"
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        cell.textLabel?.textColor = Color.textPrimary
+
+        let density = Int(site.populationDensity)
+        let weather = site.weatherForecast ?? "-"
+        cell.detailTextLabel?.text = "👥 \(density)명  •  ☀️ \(weather)"
+        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 13)
+        cell.detailTextLabel?.textColor = Color.textSecondary
+
+        cell.accessoryType = .disclosureIndicator
+        cell.backgroundColor = Color.cardBackground
+
         return cell
     }
 
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let site = mediaSites[indexPath.row]
-        let screenListVC = MediaScreenListViewController()
-        screenListVC.mediaSite = site
-        navigationController?.pushViewController(screenListVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    // MARK: - Action Functions
-    @objc private func presentTools() {
-        let toolsVC = CampaignToolsViewController()
-        let navController = UINavigationController(rootViewController: toolsVC)
-        present(navController, animated: true)
+        let site = mediaSites[indexPath.row]
+        let vc = MediaScreenListViewController()
+        vc.mediaSite = site
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
+
+
