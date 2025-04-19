@@ -26,8 +26,19 @@ source-repository head
 library
   exposed-modules:
       Api
+      Api.Classification
+      Api.Health
+      Api.Logs
+      Api.Recommend
+      Api.Train
       Handler
+      Handler.Classification
+      Handler.Health
+      Handler.Logs
+      Handler.Recommend
+      Handler.Train
       Lib
+      SampleData.SampleScreens
   other-modules:
       Paths_SkeletonAPI
   autogen-modules:
