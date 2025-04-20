@@ -1,1 +1,0 @@
-{"result": 7, "message": "Hot place recommendation!"}
