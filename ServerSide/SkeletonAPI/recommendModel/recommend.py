@@ -19,8 +19,10 @@ def main():
         input_data = json.loads(input_str)
         predictions = recommend(input_data)
         print(json.dumps(predictions))
+        sys.stdout.flush()
     except Exception as e:
         print(json.dumps({"error": str(e)}))
+        sys.stdout.flush()
 
 if __name__ == "__main__":
     main()
