@@ -7,12 +7,14 @@ import Api.Recommend()
 import Api.Logs()
 import Api.Health()
 import Api.Train()
+import Api.Predict()
 
 import Handler.Classification (classifyHandler)
 import Handler.Recommend (recommendAdHandler, recommendMediaHandler)
 import Handler.Logs (logsHandler)
 import Handler.Health (healthHandler)
 import Handler.Train (trainHandler, trainStatusHandler)
+import Handler.Predict (predictHandler)
 
 server :: Server API
 server =
@@ -21,4 +23,6 @@ server =
   :<|> recommendMediaHandler
   :<|> logsHandler
   :<|> healthHandler
-  :<|> (trainHandler :<|> trainStatusHandler)
+  :<|> trainHandler
+  :<|> trainStatusHandler
+  :<|> predictHandler

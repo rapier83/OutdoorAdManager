@@ -7,6 +7,7 @@ module Api (API, api) where
 import Servant
 import Types (Recommendation)
 import Api.Classification (ClassificationResult(..))
+import Api.Predict (PredictionInput(..))
 
 type API =
        "classify"         :> ReqBody '[JSON] [Int]        :> Post '[JSON] ClassificationResult
@@ -16,6 +17,7 @@ type API =
   :<|> "health"           :> Get '[PlainText] String
   :<|> "train"            :> PostNoContent
   :<|> "train-status"     :> Get '[PlainText] String
+  :<|> "recommendPredict" :> ReqBody '[JSON] [PredictionInput] :> Post '[JSON] [Recommendation]
 
 api :: Proxy API
 api = Proxy
