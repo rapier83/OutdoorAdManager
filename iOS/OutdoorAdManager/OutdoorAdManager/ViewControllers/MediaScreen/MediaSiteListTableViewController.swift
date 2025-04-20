@@ -4,13 +4,6 @@
 //
 //  Created by KEATON on 4/18/25.
 //
-
-
-//
-//  MediaSiteListTableViewController.swift
-//  OutdoorAdManager
-//
-
 import UIKit
 import CoreData
 
@@ -53,9 +46,9 @@ class MediaSiteListTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let site = mediaSites[indexPath.row]
             
-        let screenVC = MediaScreenListViewController()
-        screenVC.mediaSite = site
-        navigationController?.pushViewController(screenVC, animated: true)
+            let screenVC = MediaScreenListViewController()
+            screenVC.mediaSite = site
+            navigationController?.pushViewController(screenVC, animated: true)
 
     }
 }

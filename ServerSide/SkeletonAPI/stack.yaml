@@ -11,7 +11,7 @@
 # snapshot: lts-23.0
 # snapshot: nightly-2024-12-13
 # snapshot: ghc-9.8.4
-resolver: lts-21.25
+resolver: lts-23.18
 ghc-options:
   "$everything": -fwrite-ide-info -optP-Wno-nonportable-include-path
 #
