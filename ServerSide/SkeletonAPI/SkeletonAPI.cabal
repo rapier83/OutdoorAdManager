@@ -39,6 +39,7 @@ library
       Handler.Train
       Lib
       SampleData.SampleScreens
+      Types
   other-modules:
       Paths_SkeletonAPI
   autogen-modules:
