@@ -2,9 +2,6 @@
 	path = ServerSide/SkeletonAPI
 	url = https://github.com/rapier83/OutdoorAdManager.git
 
-[submodule "iOS/OutdoorAdManager"]
-	path = iOS/OutdoorAdManager
-	url = https://github.com/rapier83/OutdoorAdManager.git
 [submodule "iOS/CORA"]
 	path = iOS/CORA
 	url = https://github.com/rapier83/OutdoorAdManager.git
