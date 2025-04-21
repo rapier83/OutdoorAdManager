@@ -9,6 +9,7 @@ import UIKit
 class AdCampaignToolViewController: UIViewController {
 
     private var recommendations: [Recommendation] = []
+    private let recommendationTableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,6 +17,7 @@ class AdCampaignToolViewController: UIViewController {
         title = "캠페인 도구"
         setupLayout()
         setupToolbar()
+        setupRecommendationTable()
     }
 
     private func setupLayout() {
@@ -32,6 +34,20 @@ class AdCampaignToolViewController: UIViewController {
             label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             label.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20),
             label.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -20)
+        ])
+    }
+    
+    private func setupRecommendationTable() {
+        recommendationTableView.translatesAutoresizingMaskIntoConstraints = false
+        recommendationTableView.dataSource = self
+        recommendationTableView.delegate = self
+        recommendationTableView.register(UITableViewCell.self, forCellReuseIdentifier: "RecommendationCell")
+        view.addSubview(recommendationTableView)
+        NSLayoutConstraint.activate([
+            recommendationTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            recommendationTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            recommendationTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            recommendationTableView.heightAnchor.constraint(equalToConstant: 300)
         ])
     }
     
@@ -54,6 +70,7 @@ class AdCampaignToolViewController: UIViewController {
                 case .success(let items):
                     print("📡 추천 결과 \(items.count)개 수신됨")
                     self.recommendations = items
+                    self.recommendationTableView.reloadData()
                     ToastView(message: "추천 완료, 결과 보기 버튼을 눌러주세요.").show(in: self.view)
 
                 case .failure(let error):
@@ -79,4 +96,21 @@ class AdCampaignToolViewController: UIViewController {
         present(UINavigationController(rootViewController: resultVC), animated: true, completion: nil)
     }
     
+}
+
+extension AdCampaignToolViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return recommendations.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RecommendationCell", for: indexPath)
+        let rec = recommendations[indexPath.row]
+        var config = cell.defaultContentConfiguration()
+        config.text = "📍 \(rec.siteName)"
+        config.secondaryText = "추천 점수: \(Int(rec.score * 100))%"
+        config.secondaryTextProperties.color = rec.score > 0.7 ? .systemGreen : (rec.score > 0.4 ? .systemOrange : .systemRed)
+        cell.contentConfiguration = config
+        return cell
+    }
 }
