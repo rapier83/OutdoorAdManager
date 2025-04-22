@@ -4,3 +4,6 @@
 [submodule "Mobile/CORA-iOS"]
 	path = Mobile/CORA-iOS
 	url = https://github.com/rapier83/CORA-iOS.git
+[submodule "ServerSide/CORA-API"]
+	path = ServerSide/CORA-API
+	url = https://github.com/rapier83/CORA-API.git
